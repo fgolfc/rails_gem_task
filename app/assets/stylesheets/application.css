@@ -13,3 +13,12 @@
  *= require_tree .
  *= require_self
  */
+ .date-fields {
+  display: flex;
+  justify-content: space-between;
+  width: 25%;
+}
+
+.date-fields input[type="date"] {
+  max-width: 45%;
+}

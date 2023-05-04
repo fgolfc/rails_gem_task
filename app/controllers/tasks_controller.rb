@@ -2,9 +2,20 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
 
   # GET /tasks
-  def index
-    @tasks = Task.all
+  # app/controllers/tasks_controller.rb
+def index
+  if params[:q]&.key?(:status_eq)
+    params[:q][:status_eq] = Task.status_value(params[:q][:status_eq])
   end
+
+  if params[:q]&.key?(:deadline_lteq) && params[:q][:deadline_lteq].present?
+    params[:q][:deadline_lteq] = params[:q][:deadline_lteq].to_date + 1.day
+  end
+
+  @q = Task.ransack(params[:q])
+  @tasks = @q.result(distinct: true)
+end
+
 
   # GET /tasks/1
   def show
